@@ -12,16 +12,24 @@
   /* mobil menü */
   var burger=d.querySelector('.ye-burger'), nav=d.querySelector('.ye-nav'), ovl=d.querySelector('.ye-ovl');
   function closeNav(){ if(!nav)return; nav.classList.remove('is-open'); if(ovl)ovl.classList.remove('is-on');
-    if(burger)burger.setAttribute('aria-expanded','false'); d.body.style.overflow=''; }
+    if(burger)burger.setAttribute('aria-expanded','false'); d.body.style.overflow='';
+    d.body.classList.remove('ye-menu'); }
   if(burger&&nav){
     burger.addEventListener('click',function(){
       var open=nav.classList.toggle('is-open');
       burger.setAttribute('aria-expanded',open?'true':'false');
       if(ovl)ovl.classList.toggle('is-on',open);
       d.body.style.overflow=open?'hidden':'';
+      d.body.classList.toggle('ye-menu',open);
     });
   }
   if(ovl)ovl.addEventListener('click',closeNav);
+  if(nav){
+    nav.addEventListener('click',function(e){
+      var a=e.target.closest && e.target.closest('a[href]');
+      if(a && !a.parentElement.querySelector(':scope > .ye-sub')) closeNav();
+    });
+  }
   d.addEventListener('keydown',function(e){ if(e.key==='Escape')closeNav(); });
 
   /* mobilde alt menü aç/kapa */

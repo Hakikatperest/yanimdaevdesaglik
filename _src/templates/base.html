@@ -57,11 +57,12 @@
   <div class="ye-wrap">
     <a class="ye-logo" href="{{ root }}">
       <span class="ye-logo-m">{{ I.cross|safe }}</span>
-      <span>Yanımda Evde Sağlık<small>Hemşire hizmeti · 7/24</small></span>
+      <span>Yanımda Evde Sağlık<small>Sağlık Yanınızda, Güven Evimizde</small></span>
     </a>
     <button class="ye-burger" aria-label="Menüyü aç" aria-expanded="false" aria-controls="ye-nav">
       <span></span><span></span><span></span>
     </button>
+    <div class="ye-navwrap">
     <ul class="ye-nav" id="ye-nav">
       <li><a href="{{ root }}hizmetler/">Hizmetler</a>
         <ul class="ye-sub">
@@ -83,6 +84,7 @@
       <li><a href="{{ root }}iletisim/">İletişim</a></li>
       <li class="ye-nav-cta"><a class="ye-btn ye-btn-p ye-btn-sm" href="tel:{{ S.phone_tel }}">{{ I.phone|safe }} Hemen Ara</a></li>
     </ul>
+    </div>
   </div>
 </header>
 <div class="ye-ovl"></div>

@@ -629,66 +629,65 @@ def build_extras():
         'h0c2.6 0 4.6-2 4.6-4.6V36.6h10.8c2.6 0 4.6-2 4.6-4.6v0c0-2.6-2-4.6-4.6-4.6H36.6V16.6c0-2.6-2-4.6-4.6-4.6z"/></svg>')
 
 def build_images():
+    """Afişlerin içindeki fotoğraf bölgesini ve gerçek logoyu ayıklar.
+    Kaynak görseller hazır tanıtım afişi olduğu için merkez kırpma metni de alıyordu."""
     from PIL import Image, ImageDraw, ImageFont
-    src = os.path.join(OUT, "images/evde-saglik.webp")
+    src  = os.path.join(OUT, "images/evde-saglik.webp")
     src2 = os.path.join(OUT, "images/evde-saglik2.webp")
-    if not os.path.exists(src): return
-    im = Image.open(src).convert("RGB")
-    w, hh = im.size
-    # 4:3 kırpma
-    tw, th = (hh * 4 // 3, hh) if w / hh > 4 / 3 else (w, w * 3 // 4)
-    im2 = im.crop(((w - tw) // 2, (hh - th) // 2, (w - tw) // 2 + tw, (hh - th) // 2 + th))
+    if not os.path.exists(src):
+        return
+    a = Image.open(src).convert("RGB")
+
+    # --- hero: 1. afişteki hemşire-hasta fotoğrafı (metinsiz bölge)
+    hero = a.crop((705, 25, 1335, 585))
     for size in (640, 960, 1440):
-        r = im2.resize((size, size * 3 // 4), Image.LANCZOS)
-        r.save(os.path.join(OUT, f"assets/img/hero-{size}.webp"), "WEBP", quality=80, method=4)
-    # ikinci görsel türevleri
+        hero.resize((size, round(size * hero.height / hero.width)), Image.LANCZOS).save(
+            os.path.join(OUT, f"assets/img/hero-{size}.webp"), "WEBP", quality=82, method=4)
+
+    # --- ekip: 2. afişteki fotoğraf
     if os.path.exists(src2):
-        i3 = Image.open(src2).convert("RGB")
-        w3, h3 = i3.size
-        tw3 = h3 * 4 // 3 if w3 / h3 > 4 / 3 else w3
-        th3 = h3 if w3 / h3 > 4 / 3 else w3 * 3 // 4
-        i3 = i3.crop(((w3 - tw3) // 2, (h3 - th3) // 2, (w3 - tw3) // 2 + tw3, (h3 - th3) // 2 + th3))
-        for size in (640, 960):
-            i3.resize((size, size * 3 // 4), Image.LANCZOS).save(
-                os.path.join(OUT, f"assets/img/ekip-{size}.webp"), "WEBP", quality=80, method=4)
-    # OG görseli
-    og = im.copy()
+        b2 = Image.open(src2).convert("RGB").crop((700, 15, 1340, 560))
+        for size in (640, 960, 1440):
+            b2.resize((size, round(size * b2.height / b2.width)), Image.LANCZOS).save(
+                os.path.join(OUT, f"assets/img/ekip-{size}.webp"), "WEBP", quality=82, method=4)
+
+    # --- gerçek logo işareti (ev + kalp + artı + el)
+    mark = a.crop((75, 50, 218, 202))
+    sq = Image.new("RGB", (240, 240), (255, 255, 255))
+    m = mark.resize((216, round(216 * mark.height / mark.width)), Image.LANCZOS)
+    sq.paste(m, ((240 - m.width) // 2, (240 - m.height) // 2))
+    sq.save(os.path.join(OUT, "assets/img/logo-mark.png"), "PNG", optimize=True)
+    sq.resize((180, 180), Image.LANCZOS).save(
+        os.path.join(OUT, "assets/img/apple-touch-icon.png"), "PNG", optimize=True)
+
+    # --- schema/logo: işaret + kelime markası, beyaz zemin
+    word = a.crop((70, 45, 500, 200))
+    lg = Image.new("RGB", (600, 220), (255, 255, 255))
+    w2 = word.resize((560, round(560 * word.height / word.width)), Image.LANCZOS)
+    lg.paste(w2, (20, (220 - w2.height) // 2))
+    lg.save(os.path.join(OUT, "assets/img/logo.png"), "PNG", optimize=True)
+
+    # --- OG görseli: fotoğraf + koyu degrade + marka bilgisi
+    og = hero.copy()
     ow, oh = og.size
-    tw = int(oh * 1200 / 630)
-    if tw > ow: tw, oh2 = ow, int(ow * 630 / 1200)
-    else: oh2 = oh
-    og = og.crop(((ow - tw) // 2, (oh - oh2) // 2, (ow - tw) // 2 + tw, (oh - oh2) // 2 + oh2)).resize((1200, 630), Image.LANCZOS)
+    th = round(ow * 630 / 1200)
+    og = og.crop((0, max(0, (oh - th) // 2), ow, max(0, (oh - th) // 2) + min(th, oh))).resize((1200, 630), Image.LANCZOS)
     ov = Image.new("RGBA", (1200, 630), (0, 0, 0, 0))
     dr = ImageDraw.Draw(ov)
     for y in range(630):
-        dr.line([(0, y), (1200, y)], fill=(8, 32, 43, int(215 * (y / 630) ** 1.4)))
+        dr.line([(0, y), (1200, y)], fill=(8, 32, 43, int(220 * (y / 630) ** 1.5)))
     og = Image.alpha_composite(og.convert("RGBA"), ov).convert("RGB")
     dr = ImageDraw.Draw(og)
     fp = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
     try:
-        f1 = ImageFont.truetype(fp, 62); f2 = ImageFont.truetype(fp, 32)
+        f1 = ImageFont.truetype(fp, 60); f2 = ImageFont.truetype(fp, 30)
     except Exception:
         f1 = f2 = ImageFont.load_default()
-    dr.text((64, 400), "Yanımda Evde Sağlık", font=f1, fill=(255, 255, 255))
-    dr.text((64, 486), "Evde serum · enjeksiyon · pansuman · 7/24", font=f2, fill=(180, 240, 232))
-    dr.text((64, 534), S["phone_display"], font=f2, fill=(255, 255, 255))
+    dr.text((60, 396), "Yanımda Evde Sağlık", font=f1, fill=(255, 255, 255))
+    dr.text((60, 480), "Evde serum · enjeksiyon · pansuman · 7/24", font=f2, fill=(180, 240, 232))
+    dr.text((60, 528), S["phone_display"], font=f2, fill=(255, 255, 255))
     dr.rectangle([(0, 618), (1200, 630)], fill=(15, 138, 128))
     og.save(os.path.join(OUT, "assets/img/og-default.jpg"), "JPEG", quality=84, optimize=True)
-    # marka logosu (schema + apple-touch-icon)
-    lg = Image.new("RGB", (512, 512), (255, 255, 255))
-    dl = ImageDraw.Draw(lg)
-    dl.rounded_rectangle([16, 16, 496, 496], radius=110, fill=(15, 138, 128))
-    cx, cy, arm, th = 256, 210, 108, 40
-    dl.rounded_rectangle([cx-th, cy-arm, cx+th, cy+arm], radius=18, fill=(255, 255, 255))
-    dl.rounded_rectangle([cx-arm, cy-th, cx+arm, cy+th], radius=18, fill=(255, 255, 255))
-    try:
-        fl = ImageFont.truetype(fp, 46)
-    except Exception:
-        fl = ImageFont.load_default()
-    for t, y in [("YANIMDA", 352), ("EVDE SAĞLIK", 406)]:
-        dl.text((256 - dl.textlength(t, font=fl) / 2, y), t, font=fl, fill=(255, 255, 255))
-    lg.save(os.path.join(OUT, "assets/img/logo.png"), "PNG", optimize=True)
-    lg.resize((180, 180)).save(os.path.join(OUT, "assets/img/apple-touch-icon.png"), "PNG", optimize=True)
 
 if __name__ == "__main__":
     # eski çıktıları temizle (kaynak ve varlıklar hariç)

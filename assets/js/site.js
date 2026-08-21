@@ -29,7 +29,7 @@
     var a=li.querySelector(':scope > a'), sub=li.querySelector(':scope > .ye-sub');
     if(!sub||!a)return;
     a.addEventListener('click',function(e){
-      if(window.matchMedia('(max-width:900px)').matches){ e.preventDefault(); li.classList.toggle('is-open'); }
+      if(window.matchMedia('(max-width:1024px)').matches){ e.preventDefault(); li.classList.toggle('is-open'); }
     });
   });
 

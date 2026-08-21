@@ -483,6 +483,10 @@ def build_all():
           kicker="Hakkımızda", h1="Yanımda Evde Sağlık", crumbs=[("Hakkımızda", None)],
           lead="Hastanede yapılabilen ama hastane gerektirmeyen uygulamaları, hastanın kendi evinde ve doğru koşullarda tamamlıyoruz.",
           body="""
+<p><img src="../assets/img/ekip-960.webp" srcset="../assets/img/ekip-640.webp 640w, ../assets/img/ekip-960.webp 960w"
+     sizes="(max-width:900px) 92vw, 820px" width="960" height="720" loading="lazy" decoding="async"
+     style="border-radius:22px;aspect-ratio:16/9;object-fit:cover"
+     alt="Yanımda Evde Sağlık hemşire ekibi evde uygulama sırasında"></p>
 <h2>Ne yapıyoruz?</h2>
 <p>Evde serum uygulaması, kas içi ve cilt altı enjeksiyon, yara pansumanı, idrar sondası takma-değiştirme, nazogastrik sonda uygulaması ve hekim istemine bağlı vitamin takviyeleri. Hepsi hemşire ekibimiz tarafından, hastanın evinde yapılıyor.</p>
 <h2>Nerede çalışıyoruz?</h2>

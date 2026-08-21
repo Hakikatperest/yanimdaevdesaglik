@@ -305,7 +305,7 @@ a.ye-card:hover{color:inherit}
   .ye-hero-grid{grid-template-columns:1fr;gap:38px}
   .ye-float-1{left:10px}.ye-float-2{right:10px}
 }
-@media (max-width:900px){
+@media (max-width:1024px){
   .ye-burger{display:flex}
   .ye-nav{position:fixed;inset:0 0 0 auto;width:min(90vw,360px);background:#fff;flex-direction:column;align-items:stretch;
     gap:2px;padding:86px 18px 30px;box-shadow:var(--sh-l);transform:translateX(100%);transition:transform .3s;overflow-y:auto;margin:0}

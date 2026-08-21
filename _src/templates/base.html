@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ title }}</title>
+<meta name="description" content="{{ description }}">
+<link rel="canonical" href="{{ canonical }}">
+{%- if noindex %}
+<meta name="robots" content="noindex,follow">
+{%- else %}
+<meta name="robots" content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1">
+{%- endif %}
+<meta name="author" content="{{ S.name }}">
+<meta name="geo.region" content="TR-34">
+<meta name="geo.placename" content="İstanbul">
+<meta property="og:type" content="{{ og_type|default('website') }}">
+<meta property="og:site_name" content="{{ S.name }}">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:title" content="{{ og_title|default(title) }}">
+<meta property="og:description" content="{{ description }}">
+<meta property="og:url" content="{{ canonical }}">
+<meta property="og:image" content="{{ S.domain }}/assets/img/og-{{ og_img|default('default') }}.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ og_title|default(title) }}">
+<meta name="twitter:description" content="{{ description }}">
+<meta name="twitter:image" content="{{ S.domain }}/assets/img/og-{{ og_img|default('default') }}.jpg">
+<meta name="theme-color" content="#0F8A80">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap"></noscript>
+<link rel="stylesheet" href="{{ root }}assets/css/site.css?v={{ V }}">
+<link rel="icon" href="{{ root }}assets/img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="{{ root }}assets/img/apple-touch-icon.png">
+{%- for j in jsonld %}
+<script type="application/ld+json">{{ j|safe }}</script>
+{%- endfor %}
+</head>
+<body>
+<a class="ye-skip" href="#icerik">İçeriğe geç</a>
+
+<div class="ye-top">
+  <div class="ye-wrap">
+    <div class="ye-top-l">
+      <span class="ye-live"><i></i> 7/24 açık — şu an çağrı alıyoruz</span>
+      <span class="ye-hide-m">{{ S.region }}</span>
+    </div>
+    <a href="tel:{{ S.phone_tel }}">{{ I.phone|safe }} {{ S.phone_display }}</a>
+  </div>
+</div>
+
+<header class="ye-hdr">
+  <div class="ye-wrap">
+    <a class="ye-logo" href="{{ root }}">
+      <span class="ye-logo-m">{{ I.cross|safe }}</span>
+      <span>Yanımda Evde Sağlık<small>Hemşire hizmeti · 7/24</small></span>
+    </a>
+    <button class="ye-burger" aria-label="Menüyü aç" aria-expanded="false" aria-controls="ye-nav">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="ye-nav" id="ye-nav">
+      <li><a href="{{ root }}hizmetler/">Hizmetler</a>
+        <ul class="ye-sub">
+          {%- for s in NAV.services %}<li><a href="{{ root }}hizmetler/{{ s.slug }}/">{{ s.title }}</a></li>{% endfor %}
+        </ul>
+      </li>
+      <li><a href="{{ root }}serum-tedavileri/">Serum Tedavileri</a>
+        <ul class="ye-sub">
+          {%- for s in NAV.serums %}<li><a href="{{ root }}serum-tedavileri/{{ s.slug }}/">{{ s.title }}</a></li>{% endfor %}
+        </ul>
+      </li>
+      <li><a href="{{ root }}hizmet-bolgeleri/">Hizmet Bölgeleri</a>
+        <ul class="ye-sub">
+          {%- for dd in NAV.districts %}<li><a href="{{ root }}{{ dd.slug }}-evde-saglik/">{{ dd.name }} Evde Sağlık</a></li>{% endfor %}
+          <li><a href="{{ root }}hizmet-bolgeleri/"><strong>Tüm mahalleler →</strong></a></li>
+        </ul>
+      </li>
+      <li><a href="{{ root }}blog/">Bilgi Merkezi</a></li>
+      <li><a href="{{ root }}iletisim/">İletişim</a></li>
+      <li class="ye-nav-cta"><a class="ye-btn ye-btn-p ye-btn-sm" href="tel:{{ S.phone_tel }}">{{ I.phone|safe }} Hemen Ara</a></li>
+    </ul>
+  </div>
+</header>
+<div class="ye-ovl"></div>
+
+<main id="icerik">
+{% block content %}{% endblock %}
+</main>
+
+<footer class="ye-ft">
+  <div class="ye-wrap">
+    <div class="ye-ft-grid">
+      <div>
+        <a class="ye-ft-logo" href="{{ root }}"><span class="ye-logo-m">{{ I.cross|safe }}</span> Yanımda Evde Sağlık</a>
+        <p>İstanbul Avrupa Yakası'nda evde serum, enjeksiyon, pansuman ve sonda hizmetleri. Hemşire ekibimiz 7/24 adresinize gelir.</p>
+        <div class="ye-ft-cta">
+          <a class="ye-btn ye-btn-p ye-btn-sm" href="tel:{{ S.phone_tel }}">{{ I.phone|safe }} {{ S.phone_display }}</a>
+          <a class="ye-btn ye-btn-wa ye-btn-sm" href="https://wa.me/{{ S.wa }}" rel="noopener">{{ I.wa|safe }} WhatsApp</a>
+        </div>
+      </div>
+      <div>
+        <h4>Hizmetler</h4>
+        <ul>{% for s in NAV.services %}<li><a href="{{ root }}hizmetler/{{ s.slug }}/">{{ s.title }}</a></li>{% endfor %}</ul>
+      </div>
+      <div>
+        <h4>Serum Tedavileri</h4>
+        <ul>{% for s in NAV.serums[:9] %}<li><a href="{{ root }}serum-tedavileri/{{ s.slug }}/">{{ s.title }}</a></li>{% endfor %}
+          <li><a href="{{ root }}serum-tedavileri/"><strong>Tümü →</strong></a></li></ul>
+      </div>
+      <div>
+        <h4>Kurumsal</h4>
+        <ul>
+          <li><a href="{{ root }}hakkimizda/">Hakkımızda</a></li>
+          <li><a href="{{ root }}hizmet-bolgeleri/">Hizmet Bölgeleri</a></li>
+          <li><a href="{{ root }}blog/">Bilgi Merkezi</a></li>
+          <li><a href="{{ root }}sikca-sorulan-sorular/">Sıkça Sorulan Sorular</a></li>
+          <li><a href="{{ root }}iletisim/">İletişim</a></li>
+          <li><a href="{{ S.instagram }}" rel="noopener nofollow" target="_blank">Instagram</a></li>
+          <li><a href="{{ root }}gizlilik-politikasi/">Gizlilik Politikası</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ye-ft-mesh">
+      <h4>Hizmet verdiğimiz bölgeler</h4>
+      <ul class="ye-mesh">
+        {%- for l in NAV.footer_areas %}<li><a href="{{ root }}{{ l.slug }}/">{{ l.label }}</a></li>{% endfor %}
+        <li><a href="{{ root }}hizmet-bolgeleri/"><strong>Tüm mahalleler →</strong></a></li>
+      </ul>
+    </div>
+
+    <p class="ye-disc">{{ DISCLAIMER }}</p>
+
+    <div class="ye-ft-btm">
+      <span>© {{ YEAR }} {{ S.name }} — Tüm hakları saklıdır.</span>
+      <span>İstanbul Avrupa Yakası · 7/24 · {{ S.phone_display }}</span>
+    </div>
+  </div>
+</footer>
+
+<div class="ye-fl">
+  <a class="ye-fl-wa" href="https://wa.me/{{ S.wa }}?text={{ WA_TEXT }}" rel="noopener" aria-label="WhatsApp ile yazın">{{ I.wa|safe }}</a>
+  <a class="ye-fl-tel" href="tel:{{ S.phone_tel }}" aria-label="Hemen arayın">{{ I.phone|safe }}</a>
+</div>
+<a class="ye-ask" href="https://wa.me/{{ S.wa }}?text={{ WA_TEXT }}" rel="noopener" aria-label="Uzmana danışın — WhatsApp">
+  <span class="ye-ask-av">{{ I.nurse|safe }}<i></i></span>
+  <span class="ye-ask-t"><b>Uzmana Danış</b><span>Çevrimiçi · hemen yanıt</span></span>
+</a>
+
+<script src="{{ root }}assets/js/site.js?v={{ V }}" defer></script>
+</body>
+</html>

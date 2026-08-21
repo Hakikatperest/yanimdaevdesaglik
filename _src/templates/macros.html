@@ -1,0 +1,61 @@
+{% macro faq(items, title='Sıkça sorulan sorular') %}
+<h2>{{ title }}</h2>
+<div class="ye-faq ye-rv">
+  {%- for q,a in items %}
+  <details{% if loop.first %} open{% endif %}>
+    <summary>{{ q }}</summary>
+    <div class="ye-faq-a"><p>{{ a }}</p></div>
+  </details>
+  {%- endfor %}
+</div>
+{% endmacro %}
+
+{% macro cta(S, I, WA_TEXT, head, text) %}
+<div class="ye-cta ye-rv">
+  <div class="ye-cta-in">
+    <div>
+      <h2 style="margin-bottom:.35em">{{ head }}</h2>
+      <p>{{ text }}</p>
+    </div>
+    <div class="ye-btns">
+      <a class="ye-btn ye-btn-g" href="tel:{{ S.phone_tel }}">{{ I.phone|safe }} {{ S.phone_display }}</a>
+      <a class="ye-btn ye-btn-wa" href="https://wa.me/{{ S.wa }}?text={{ WA_TEXT }}" rel="noopener">{{ I.wa|safe }} WhatsApp'tan yaz</a>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro maps(BR, I, heading='Konumlarımız') %}
+<h2>{{ heading }}</h2>
+<div class="ye-maps ye-rv">
+  {%- for b in BR %}
+  <div class="ye-map">
+    <div class="ye-map-t">{{ I.pin|safe }} {{ b.title }}</div>
+    <div data-map="https://www.google.com/maps/embed?pb={{ b.pb }}" data-title="{{ b.title }} konumu" style="min-height:250px"></div>
+  </div>
+  {%- endfor %}
+</div>
+{% endmacro %}
+
+{% macro bc(items, root) %}
+<nav class="ye-bc" aria-label="Site haritası yolu"><div class="ye-wrap"><ol>
+  <li><a href="{{ root }}">Ana Sayfa</a></li>
+  {%- for label,url in items %}
+  <li>{% if url %}<a href="{{ url }}">{{ label }}</a>{% else %}<span>{{ label }}</span>{% endif %}</li>
+  {%- endfor %}
+</ol></div></nav>
+{% endmacro %}
+
+{% macro steps(items) %}
+<ol class="ye-steps ye-rv">
+  {%- for t,d in items %}
+  <li><h3>{{ t }}</h3><p>{{ d }}</p></li>
+  {%- endfor %}
+</ol>
+{% endmacro %}
+
+{% macro serumpills(SER, root, limit=99) %}
+<ul class="ye-pills">
+  {%- for s in SER[:limit] %}<li><a href="{{ root }}serum-tedavileri/{{ s.slug }}/">{{ s.title }}</a></li>{% endfor %}
+</ul>
+{% endmacro %}

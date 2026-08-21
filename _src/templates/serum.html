@@ -1,0 +1,76 @@
+{% extends "base.html" %}{% import "macros.html" as m %}
+{% block content %}
+{{ m.bc(crumbs, root) }}
+<section class="ye-ph"><div class="ye-wrap">
+  <span class="ye-kicker">Serum Tedavileri</span>
+  <h1>{{ SM.title }}</h1>
+  <p class="ye-lead">{{ SM.lead }}</p>
+  <div class="ye-btns">
+    <a class="ye-btn ye-btn-p" href="tel:{{ S.phone_tel }}">{{ I.phone|safe }} {{ S.phone_display }}</a>
+    <a class="ye-btn ye-btn-wa" href="https://wa.me/{{ S.wa }}?text={{ WA_TEXT }}" rel="noopener">{{ I.wa|safe }} WhatsApp</a>
+  </div>
+</div></section>
+
+<section class="ye-sec"><div class="ye-wrap ye-split">
+  <div class="ye-art">
+    <h2>Hangi durumlarda gündeme gelir?</h2>
+    <ul class="ye-check">{% for x in SM.when %}<li>{{ x }}</li>{% endfor %}</ul>
+
+    <h2>İçeriğinde neler olabilir?</h2>
+    <p>Aşağıdakiler yalnızca <strong>olası</strong> bileşenlerdir. Kesin içeriği ve dozları hekiminiz belirler; ekibimiz hekim isteminde ne yazıyorsa onu uygular.</p>
+    <ul class="ye-check">{% for x in SM.content %}<li>{{ x }}</li>{% endfor %}</ul>
+
+    <h2>Uygulama nasıl ilerliyor?</h2>
+    <ol>
+      <li>Telefonda şikâyetiniz, yaşınız, kronik hastalıklarınız ve kullandığınız ilaçlar sorulur.</li>
+      <li>Hekim istemi/reçete kontrol edilir. Yoksa önce muayene için yönlendirilirsiniz.</li>
+      <li>Ekip adrese gelir; tansiyon, nabız ve gerekiyorsa ateş ölçülür.</li>
+      <li>Steril şartlarda damar yolu açılır, serum hekimin belirlediği hızda başlatılır.</li>
+      <li>Uygulama boyunca hemşire evde kalır; reaksiyon takibi yapılır.</li>
+      <li>Serum bitince damar yolu kapatılır, tıbbi atık ekiple geri götürülür.</li>
+    </ol>
+
+    <div class="ye-box ye-box-r">
+      <h3>Dikkat edilmesi gerekenler</h3>
+      <ul class="ye-warn" style="margin-bottom:0">{% for x in SM.care %}<li>{{ x }}</li>{% endfor %}</ul>
+    </div>
+
+    <h2>{{ SM.title }} nerelerde uygulanıyor?</h2>
+    <p>Esenyurt, Beylikdüzü, Avcılar, Büyükçekmece ve Başakşehir'in tüm mahallelerinde; ayrıca Hadımköy ve Boğazköy yönünde evinize geliyoruz.</p>
+    <ul class="ye-mesh">
+      {%- for d in DIST %}<li><a href="{{ root }}{{ d.slug }}-evde-serum/">{{ d.name }} evde serum</a></li>{% endfor %}
+      {%- for f in FLAG_SERUM %}<li><a href="{{ root }}{{ f.slug }}/">{{ f.name }} evde serum</a></li>{% endfor %}
+    </ul>
+
+    <h2>Diğer serum tedavileri</h2>
+    {{ m.serumpills(OTHERS, root) }}
+
+    {{ m.faq(FAQ) }}
+
+    <div class="ye-box">
+      <p style="margin:0;font-size:.9rem">{{ DISCLAIMER }}</p>
+    </div>
+  </div>
+
+  <aside class="ye-aside">
+    <div class="ye-aside-c" style="background:linear-gradient(135deg,var(--brand-l),#fff);border-color:var(--brand-l)">
+      <h3>Şimdi mi gerekiyor?</h3>
+      <p style="font-size:.9rem">7/24 çağrı alıyoruz — gece ve hafta sonu dahil.</p>
+      <a class="ye-btn ye-btn-p ye-btn-sm" style="width:100%" href="tel:{{ S.phone_tel }}">{{ I.phone|safe }} {{ S.phone_display }}</a>
+      <a class="ye-btn ye-btn-wa ye-btn-sm" style="width:100%;margin-top:8px" href="https://wa.me/{{ S.wa }}?text={{ WA_TEXT }}" rel="noopener">{{ I.wa|safe }} WhatsApp</a>
+    </div>
+    <div class="ye-aside-c">
+      <h3>Evde sağlık hizmetleri</h3>
+      <ul>{% for s in SRV %}<li><a href="{{ root }}hizmetler/{{ s.slug }}/">{{ s.title }}</a></li>{% endfor %}</ul>
+    </div>
+    <div class="ye-aside-c">
+      <h3>Diğer serumlar</h3>
+      <ul>{% for s in OTHERS[:8] %}<li><a href="{{ root }}serum-tedavileri/{{ s.slug }}/">{{ s.title }}</a></li>{% endfor %}</ul>
+    </div>
+  </aside>
+</div></section>
+
+<section class="ye-sec ye-sec-soft"><div class="ye-wrap">
+  {{ m.cta(S, I, WA_TEXT, SM.title + ' için evinize geliyoruz', 'Hekim isteminiz varsa doğrudan uygulama için; yoksa önce nasıl ilerlemeniz gerektiği için arayın.') }}
+</div></section>
+{% endblock %}

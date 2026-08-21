@@ -1,0 +1,166 @@
+{% extends "base.html" %}{% import "macros.html" as m %}
+{% block content %}
+
+<section class="ye-hero">
+  <div class="ye-wrap ye-hero-grid">
+    <div>
+      <span class="ye-eyebrow">{{ I.pin|safe }} Esenyurt · Beylikdüzü · Avcılar · Büyükçekmece · Başakşehir</span>
+      <h1>Evde <em>serum ve sağlık hizmeti</em> — hemşiremiz kapınızda, 7/24</h1>
+      <p class="ye-lead">Hastane kuyruğunda saatlerce beklemek zorunda değilsiniz. Serum, enjeksiyon, pansuman, sonda takma ve daha fazlası; hekim istemi doğrultusunda kendi evinizde, deneyimli hemşireler tarafından uygulanır.</p>
+      <ul class="ye-trust">
+        <li>{{ I.clock|safe }} Gece, hafta sonu, resmî tatil</li>
+        <li>{{ I.shield|safe }} Hekim istemine uygun uygulama</li>
+        <li>{{ I.nurse|safe }} Deneyimli hemşire ekibi</li>
+        <li>{{ I.pin|safe }} 3 ayrı konum</li>
+      </ul>
+      <div class="ye-btns">
+        <a class="ye-btn ye-btn-p" href="tel:{{ S.phone_tel }}">{{ I.phone|safe }} {{ S.phone_display }}</a>
+        <a class="ye-btn ye-btn-wa" href="https://wa.me/{{ S.wa }}?text={{ WA_TEXT }}" rel="noopener">{{ I.wa|safe }} WhatsApp'tan yaz</a>
+      </div>
+      <p class="ye-note" style="margin-bottom:0">Aradığınızda şikâyetiniz, yaşınız ve kullandığınız ilaçlar sorulur; hekim istemi yoksa önce muayene için yönlendirilirsiniz.</p>
+    </div>
+    <div class="ye-hero-media">
+      <img src="{{ root }}assets/img/hero-960.webp"
+           srcset="{{ root }}assets/img/hero-640.webp 640w, {{ root }}assets/img/hero-960.webp 960w, {{ root }}assets/img/hero-1440.webp 1440w"
+           sizes="(max-width:1024px) 92vw, 46vw" width="960" height="720" fetchpriority="high" decoding="async"
+           alt="Yanımda Evde Sağlık hemşiresi evde serum uygulaması yaparken">
+      <div class="ye-float ye-float-1">
+        <span class="ye-float-ic">{{ I.clock|safe }}</span>
+        <span><b>7/24 çağrı</b><span>Gece 03.00 dahil</span></span>
+      </div>
+      <div class="ye-float ye-float-2">
+        <span class="ye-float-ic">{{ I.drop|safe }}</span>
+        <span><b>15 serum tedavisi</b><span>Hekim istemiyle</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ye-sec">
+  <div class="ye-wrap">
+    <div class="ye-head ye-center ye-rv">
+      <span class="ye-kicker">Hizmetlerimiz</span>
+      <h2>Evinizde yapılabilen sağlık uygulamaları</h2>
+      <p>Hepsi hekim istemi ve reçetesi doğrultusunda, steril şartlarda ve uygulama sonrası tıbbi atık geri alınarak yapılır.</p>
+    </div>
+    <div class="ye-grid ye-g4 ye-rv">
+      {%- for s in SRV %}
+      <a class="ye-card" href="{{ root }}hizmetler/{{ s.slug }}/">
+        <span class="ye-card-ic">{{ I[s.icon]|safe }}</span>
+        <h3>{{ s.title }}</h3>
+        <p>{{ s.short }}</p>
+        <span class="ye-card-lnk">Detaylar {{ I.arrow|safe }}</span>
+      </a>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="ye-sec ye-sec-mint">
+  <div class="ye-wrap">
+    <div class="ye-head ye-rv">
+      <span class="ye-kicker">Serum Tedavileri</span>
+      <h2>Hangi şikâyet için hangi serum?</h2>
+      <p>Aşağıdaki başlıkların her biri için ayrı bir bilgi sayfası hazırladık: belirtiler, uygulamanın nasıl ilerlediği, içeriğinde neler olabileceği ve dikkat edilmesi gerekenler.</p>
+    </div>
+    {{ m.serumpills(SER, root) }}
+    <div class="ye-box ye-box-b ye-rv" style="margin-top:34px">
+      <h3>Serum kararını kim veriyor?</h3>
+      <p>Hangi serumun uygulanacağına ve içine hangi ilaçların ekleneceğine <strong>hekim</strong> karar verir. Ekibimiz hekim istemi olmadan damar içi uygulama yapmaz. Hekim değerlendirmesi olmayan durumlarda önce muayene için yönlendirme yapılır — bu bizim için tartışmaya açık bir konu değil.</p>
+    </div>
+  </div>
+</section>
+
+<section class="ye-sec">
+  <div class="ye-wrap">
+    <div class="ye-head ye-center ye-rv">
+      <span class="ye-kicker">Nasıl işliyor</span>
+      <h2>Aramadan uygulama sonuna kadar</h2>
+    </div>
+    {{ m.steps([
+      ('Arayın ya da yazın','Şikâyetinizi, yaşınızı, kronik hastalık ve kullandığınız ilaçları sorarız. Hekim istemi/reçete varsa fotoğrafını isteriz.'),
+      ('Ekip yönlendirilir','Adresinize en yakın konumdaki ekip (Beylikdüzü, Esenyurt veya Bahçeşehir) yola çıkar. Size gerçekçi bir varış saati söylenir.'),
+      ('Uygulama evde yapılır','Tansiyon ve nabız ölçülür, işlem steril şartlarda uygulanır. Serum bitene kadar hemşire evde kalır.'),
+      ('Sonrası anlatılır','Dikkat edilecekler ve varsa bir sonraki uygulama tarihi yazılı bırakılır. Tıbbi atık ekiple geri götürülür.')
+    ]) }}
+  </div>
+</section>
+
+<section class="ye-sec ye-sec-soft">
+  <div class="ye-wrap">
+    <div class="ye-head ye-rv">
+      <span class="ye-kicker">Hizmet Bölgeleri</span>
+      <h2>İstanbul Avrupa Yakası'nda nerelere geliyoruz?</h2>
+      <p>Beş ilçede tüm mahallelere hizmet veriyoruz. Mahallenizin sayfasında o bölgeye özel bilgileri bulabilirsiniz.</p>
+    </div>
+    <div class="ye-dist ye-rv">
+      {%- for d in DIST %}
+      <div class="ye-dist-c">
+        <h3><a href="{{ root }}{{ d.slug }}-evde-saglik/">{{ d.name }} Evde Sağlık</a></h3>
+        <span>{{ d.mahalle_count }} mahallenin tamamı</span>
+        <ul class="ye-mesh">
+          {%- for mh in d.top %}<li><a href="{{ root }}{{ mh.slug }}/">{{ mh.name }}</a></li>{% endfor %}
+          <li><a href="{{ root }}{{ d.slug }}-evde-saglik/"><strong>+{{ d.rest }} mahalle</strong></a></li>
+        </ul>
+      </div>
+      {%- endfor %}
+    </div>
+    <p class="ye-note">Ayrıca <strong>{{ EXTRA_TXT }}</strong> bölgelerine de gidiyoruz. Adresinizi aradığınızda teyit ediyoruz.</p>
+  </div>
+</section>
+
+<section class="ye-sec">
+  <div class="ye-wrap">
+    {{ m.maps(BR, I, 'Konumlarımız') }}
+    <p class="ye-note">Üç ayrı konumumuz sayesinde Esenyurt–Beylikdüzü–Bahçeşehir hattındaki çağrılara aynı anda yanıt verebiliyoruz.</p>
+  </div>
+</section>
+
+<section class="ye-sec ye-sec-soft">
+  <div class="ye-wrap">
+    <div class="ye-head ye-center ye-rv">
+      <span class="ye-kicker">Neden bizi arıyorlar</span>
+      <h2>Hastaneye gitmeden çözülebilen işler için</h2>
+    </div>
+    <div class="ye-grid ye-g3 ye-rv">
+      <div class="ye-card"><span class="ye-card-ic">{{ I.clock|safe }}</span><h3>Saat gözetmiyoruz</h3><p>Gece yarısı yükselen ateş, sabaha kadar geçmeyen migren ya da hafta sonu biten sonda süresi — çağrı saatine bakmıyoruz.</p></div>
+      <div class="ye-card"><span class="ye-card-ic">{{ I.shield|safe }}</span><h3>Kurala bağlı çalışıyoruz</h3><p>Hekim istemi olmayan damar içi uygulama yapmıyoruz. Bu, size hayır demek anlamına gelse bile değişmiyor.</p></div>
+      <div class="ye-card"><span class="ye-card-ic">{{ I.nurse|safe }}</span><h3>Uygulama boyunca yanınızdayız</h3><p>Serum takılıp gidilmiyor. Uygulama bitene kadar hemşire evde kalır, reaksiyon takibi yapar.</p></div>
+      <div class="ye-card"><span class="ye-card-ic">{{ I.pin|safe }}</span><h3>Bölgeyi biliyoruz</h3><p>Site içi adresler, blok tarifleri ve güvenlik girişleri bizim için sürpriz değil. Kapıda vakit kaybetmiyorsunuz.</p></div>
+      <div class="ye-card"><span class="ye-card-ic">{{ I.bandage|safe }}</span><h3>Düzen kurabiliyoruz</h3><p>Düzenli pansuman, haftalık enjeksiyon veya aylık sonda değişimi için gün ve saat sabitlenir.</p></div>
+      <div class="ye-card"><span class="ye-card-ic">{{ I.drop|safe }}</span><h3>Atığı geride bırakmıyoruz</h3><p>Kullanılan iğne, set ve malzeme tıbbi atık kutusunda toplanır, ev çöpüne bırakılmaz.</p></div>
+    </div>
+  </div>
+</section>
+
+{% if POSTS %}
+<section class="ye-sec">
+  <div class="ye-wrap">
+    <div class="ye-head ye-rv">
+      <span class="ye-kicker">Bilgi Merkezi</span>
+      <h2>Sık karşılaştığımız soruların uzun cevapları</h2>
+    </div>
+    <div class="ye-grid ye-g3 ye-rv">
+      {%- for p in POSTS[:6] %}
+      <a class="ye-card" href="{{ root }}blog/{{ p.slug }}/">
+        <h3>{{ p.title }}</h3><p>{{ p.excerpt }}</p>
+        <span class="ye-card-lnk">Oku {{ I.arrow|safe }}</span>
+      </a>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="ye-sec ye-sec-soft">
+  <div class="ye-wrap ye-narrow ye-art">
+    {{ m.faq(FAQ) }}
+  </div>
+</section>
+
+<section class="ye-sec"><div class="ye-wrap">
+  {{ m.cta(S, I, WA_TEXT, 'Şimdi mi gerekiyor? Şimdi arayın.', 'Gece, hafta sonu ve resmî tatil dahil 7/24 çağrı alıyoruz. Telefonda durumunuzu dinler, gerçekçi bir varış saati söyleriz.') }}
+  <p class="ye-note">{{ DISCLAIMER }}</p>
+</div></section>
+
+{% endblock %}

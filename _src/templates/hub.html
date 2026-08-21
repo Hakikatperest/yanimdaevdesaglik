@@ -1,0 +1,56 @@
+{% extends "base.html" %}{% import "macros.html" as m %}
+{% block content %}
+{{ m.bc(crumbs, root) }}
+<section class="ye-ph"><div class="ye-wrap">
+  <span class="ye-kicker">{{ kicker }}</span>
+  <h1>{{ h1 }}</h1>
+  <p class="ye-lead">{{ lead }}</p>
+  <div class="ye-btns">
+    <a class="ye-btn ye-btn-p" href="tel:{{ S.phone_tel }}">{{ I.phone|safe }} {{ S.phone_display }}</a>
+    <a class="ye-btn ye-btn-wa" href="https://wa.me/{{ S.wa }}?text={{ WA_TEXT }}" rel="noopener">{{ I.wa|safe }} WhatsApp</a>
+  </div>
+</div></section>
+
+{% if intro %}
+<section class="ye-sec" style="padding-bottom:0"><div class="ye-wrap ye-narrow ye-art">{{ intro|safe }}</div></section>
+{% endif %}
+
+{% if cards %}
+<section class="ye-sec"><div class="ye-wrap">
+  <div class="ye-grid {{ grid|default('ye-g3') }} ye-rv">
+    {%- for c in cards %}
+    <a class="ye-card" href="{{ c.url }}">
+      {%- if c.icon %}<span class="ye-card-ic">{{ I[c.icon]|safe }}</span>{% endif %}
+      <h3>{{ c.title }}</h3><p>{{ c.text }}</p>
+      <span class="ye-card-lnk">Detaylar {{ I.arrow|safe }}</span>
+    </a>
+    {%- endfor %}
+  </div>
+</div></section>
+{% endif %}
+
+{% if groups %}
+<section class="ye-sec ye-sec-soft"><div class="ye-wrap">
+  {%- for g in groups %}
+  <div class="ye-box ye-rv" style="background:#fff">
+    <h3 style="margin-bottom:4px"><a href="{{ g.url }}">{{ g.title }}</a></h3>
+    <p style="font-size:.9rem;color:var(--ink-3)">{{ g.sub }}</p>
+    <ul class="ye-mesh">{% for l in g.links %}<li><a href="{{ root }}{{ l.slug }}/">{{ l.label }}</a></li>{% endfor %}</ul>
+  </div>
+  {%- endfor %}
+</div></section>
+{% endif %}
+
+{% if body %}
+<section class="ye-sec"><div class="ye-wrap ye-narrow ye-art">{{ body|safe }}</div></section>
+{% endif %}
+
+{% if faq %}
+<section class="ye-sec ye-sec-soft"><div class="ye-wrap ye-narrow ye-art">{{ m.faq(faq) }}</div></section>
+{% endif %}
+
+<section class="ye-sec"><div class="ye-wrap">
+  {{ m.cta(S, I, WA_TEXT, cta_h, cta_t) }}
+  <p class="ye-note">{{ DISCLAIMER }}</p>
+</div></section>
+{% endblock %}

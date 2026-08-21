@@ -1,0 +1,111 @@
+{% extends "base.html" %}{% import "macros.html" as m %}
+{% block content %}
+{{ m.bc(crumbs, root) }}
+<section class="ye-ph"><div class="ye-wrap">
+  <span class="ye-kicker">{{ L.kicker }}</span>
+  <h1>{{ h1 }}</h1>
+  <p class="ye-lead">{{ L.lead }}</p>
+  <div class="ye-btns">
+    <a class="ye-btn ye-btn-p" href="tel:{{ S.phone_tel }}">{{ I.phone|safe }} {{ S.phone_display }}</a>
+    <a class="ye-btn ye-btn-wa" href="https://wa.me/{{ S.wa }}?text={{ WA_TEXT }}" rel="noopener">{{ I.wa|safe }} WhatsApp'tan yaz</a>
+  </div>
+  {%- if L.covers %}
+  <p class="ye-note" style="margin-bottom:0">Kapsadığımız alan: {{ L.covers|join(' · ') }}</p>
+  {%- endif %}
+</div></section>
+
+<section class="ye-sec"><div class="ye-wrap ye-split">
+  <div class="ye-art">
+
+    {%- for head, paras in L.blocks %}
+    <h2>{{ head }}</h2>
+    {%- for p in paras %}<p>{{ p }}</p>{% endfor %}
+    {%- endfor %}
+
+    <h2>{{ L.nd }} verdiğimiz hizmetler</h2>
+    <div class="ye-grid ye-g2">
+      {%- for s in SRV %}
+      <a class="ye-card" href="{{ root }}hizmetler/{{ s.slug }}/">
+        <span class="ye-card-ic">{{ I[s.icon]|safe }}</span>
+        <h3>{{ s.title }}</h3><p>{{ s.short }}</p>
+      </a>
+      {%- endfor %}
+    </div>
+
+    <h2>{{ L.nd }} en çok istenen serum tedavileri</h2>
+    <p>Aşağıdaki başlıkların hepsi hekim istemi doğrultusunda uygulanır. Her biri için ayrıntılı bilgi sayfası hazırladık.</p>
+    {{ m.serumpills(SER_LOCAL, root) }}
+
+    {%- if L.extra %}
+    <h2>{{ L.extra[0] }}</h2>
+    <ul class="ye-check">{% for x in L.extra[1] %}<li>{{ x }}</li>{% endfor %}</ul>
+    {%- endif %}
+
+    <h2>{{ L.name }} için arama sonrası akış</h2>
+    <ol>
+      <li>Telefonda şikâyetiniz, yaşınız, kronik hastalıklarınız ve kullandığınız ilaçlar sorulur.</li>
+      <li>Hekim istemi/reçete varsa fotoğrafı istenir; yoksa nasıl ilerlemeniz gerektiği anlatılır.</li>
+      <li>{{ L.branch_title }} konumumuzdaki ekip adresinize yönlendirilir ve size gerçekçi bir varış saati söylenir.</li>
+      <li>Uygulama evde, steril şartlarda yapılır; serum bitene kadar hemşire yanınızda kalır.</li>
+      <li>Tıbbi atık ekiple geri götürülür, bir sonraki uygulama tarihi yazılı bırakılır.</li>
+    </ol>
+
+    {%- if L.child_links %}
+    <h2>{{ L.child_title }}</h2>
+    <p>{{ L.child_lead }}</p>
+    <ul class="ye-mesh">
+      {%- for c in L.child_links %}<li><a href="{{ root }}{{ c.slug }}/">{{ c.label }}</a></li>{% endfor %}
+    </ul>
+    {%- endif %}
+
+    {%- if L.sibling_links %}
+    <h2>Yakın bölgeler</h2>
+    <ul class="ye-mesh">
+      {%- for c in L.sibling_links %}<li><a href="{{ root }}{{ c.slug }}/">{{ c.label }}</a></li>{% endfor %}
+    </ul>
+    {%- endif %}
+
+    <h2>{{ L.branch_title }} konumumuz</h2>
+    <p>{{ L.name }} çağrılarını çoğunlukla {{ L.branch_title }} konumumuzdaki ekip karşılıyor.</p>
+    <div class="ye-map" style="margin-bottom:26px">
+      <div class="ye-map-t">{{ I.pin|safe }} {{ L.branch_title }}</div>
+      <div data-map="https://www.google.com/maps/embed?pb={{ L.branch_pb }}" data-title="{{ L.branch_title }} konumu" style="min-height:250px"></div>
+    </div>
+
+    {{ m.faq(L.faq, L.name + ' evde sağlık hizmeti hakkında sık sorulanlar') }}
+
+    <div class="ye-box ye-box-r">
+      <h3>Önemli uyarı</h3>
+      <p style="margin:0">{{ DISCLAIMER }}</p>
+    </div>
+  </div>
+
+  <aside class="ye-aside">
+    <div class="ye-aside-c" style="background:linear-gradient(135deg,var(--brand-l),#fff);border-color:var(--brand-l)">
+      <h3>{{ L.name }} için 7/24 hat</h3>
+      <p style="font-size:.9rem">Gece, hafta sonu ve resmî tatil dahil çağrı alıyoruz.</p>
+      <a class="ye-btn ye-btn-p ye-btn-sm" style="width:100%" href="tel:{{ S.phone_tel }}">{{ I.phone|safe }} {{ S.phone_display }}</a>
+      <a class="ye-btn ye-btn-wa ye-btn-sm" style="width:100%;margin-top:8px" href="https://wa.me/{{ S.wa }}?text={{ WA_TEXT }}" rel="noopener">{{ I.wa|safe }} WhatsApp</a>
+    </div>
+    <div class="ye-aside-c">
+      <h3>Hizmetlerimiz</h3>
+      <ul>{% for s in SRV %}<li><a href="{{ root }}hizmetler/{{ s.slug }}/">{{ s.title }}</a></li>{% endfor %}</ul>
+    </div>
+    {%- if L.aside_links %}
+    <div class="ye-aside-c">
+      <h3>{{ L.aside_title }}</h3>
+      <ul>{% for c in L.aside_links %}<li><a href="{{ root }}{{ c.slug }}/">{{ c.label }}</a></li>{% endfor %}</ul>
+    </div>
+    {%- endif %}
+    <div class="ye-aside-c">
+      <h3>Serum tedavileri</h3>
+      <ul>{% for s in SER[:8] %}<li><a href="{{ root }}serum-tedavileri/{{ s.slug }}/">{{ s.title }}</a></li>{% endfor %}
+      <li><a href="{{ root }}serum-tedavileri/"><strong>Tümü →</strong></a></li></ul>
+    </div>
+  </aside>
+</div></section>
+
+<section class="ye-sec ye-sec-soft"><div class="ye-wrap">
+  {{ m.cta(S, I, WA_TEXT, L.cta_h, L.cta_t) }}
+</div></section>
+{% endblock %}

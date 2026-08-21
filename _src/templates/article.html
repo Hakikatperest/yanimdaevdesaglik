@@ -1,0 +1,33 @@
+{% extends "base.html" %}{% import "macros.html" as m %}
+{% block content %}
+{{ m.bc(crumbs, root) }}
+<section class="ye-ph"><div class="ye-wrap ye-narrow">
+  <span class="ye-kicker">Bilgi Merkezi</span>
+  <h1>{{ P.title }}</h1>
+  <p class="ye-lead">{{ P.excerpt }}</p>
+  <p class="ye-note" style="margin-bottom:0">Yayın: {{ P.date_tr }}{% if P.updated_tr %} · Güncelleme: {{ P.updated_tr }}{% endif %}</p>
+</div></section>
+
+<section class="ye-sec"><div class="ye-wrap ye-split">
+  <div class="ye-art">
+    {{ P.body|safe }}
+    {%- if P.faq %}{{ m.faq(P.faq) }}{% endif %}
+    <div class="ye-box ye-box-r"><h3>Önemli uyarı</h3><p style="margin:0">{{ DISCLAIMER }}</p></div>
+  </div>
+  <aside class="ye-aside">
+    <div class="ye-aside-c" style="background:linear-gradient(135deg,var(--brand-l),#fff);border-color:var(--brand-l)">
+      <h3>7/24 çağrı hattı</h3>
+      <a class="ye-btn ye-btn-p ye-btn-sm" style="width:100%" href="tel:{{ S.phone_tel }}">{{ I.phone|safe }} {{ S.phone_display }}</a>
+      <a class="ye-btn ye-btn-wa ye-btn-sm" style="width:100%;margin-top:8px" href="https://wa.me/{{ S.wa }}?text={{ WA_TEXT }}" rel="noopener">{{ I.wa|safe }} WhatsApp</a>
+    </div>
+    <div class="ye-aside-c"><h3>Serum tedavileri</h3>
+      <ul>{% for s in SER[:9] %}<li><a href="{{ root }}serum-tedavileri/{{ s.slug }}/">{{ s.title }}</a></li>{% endfor %}</ul></div>
+    <div class="ye-aside-c"><h3>Diğer yazılar</h3>
+      <ul>{% for o in OTHERS[:6] %}<li><a href="{{ root }}blog/{{ o.slug }}/">{{ o.title }}</a></li>{% endfor %}</ul></div>
+  </aside>
+</div></section>
+
+<section class="ye-sec ye-sec-soft"><div class="ye-wrap">
+  {{ m.cta(S, I, WA_TEXT, 'Evde uygulama gerekiyorsa arayın', 'Bu yazıdaki bilgiler genel niteliktedir. Durumunuz için ne gerektiğini telefonda konuşalım.') }}
+</div></section>
+{% endblock %}

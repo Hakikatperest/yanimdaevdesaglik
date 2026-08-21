@@ -1,0 +1,70 @@
+{% extends "base.html" %}{% import "macros.html" as m %}
+{% block content %}
+{{ m.bc(crumbs, root) }}
+<section class="ye-ph"><div class="ye-wrap">
+  <span class="ye-kicker">Evde Sağlık Hizmetleri</span>
+  <h1>{{ SV.title }}</h1>
+  <p class="ye-lead">{{ SV.lead }}</p>
+  <div class="ye-btns">
+    <a class="ye-btn ye-btn-p" href="tel:{{ S.phone_tel }}">{{ I.phone|safe }} {{ S.phone_display }}</a>
+    <a class="ye-btn ye-btn-wa" href="https://wa.me/{{ S.wa }}?text={{ WA_TEXT }}" rel="noopener">{{ I.wa|safe }} WhatsApp</a>
+  </div>
+</div></section>
+
+<section class="ye-sec"><div class="ye-wrap ye-split">
+  <div class="ye-art">
+    {%- for head, items in SV.sections %}
+    <h2>{{ head }}</h2>
+    <ul class="ye-check">{% for it in items %}<li>{{ it }}</li>{% endfor %}</ul>
+    {%- endfor %}
+
+    <div class="ye-box ye-box-b">
+      <h3>Nerelere geliyoruz?</h3>
+      <p>{{ SV.title }} hizmetini <strong>Esenyurt, Beylikdüzü, Avcılar, Büyükçekmece ve Başakşehir</strong> ilçelerinin tüm mahallelerinde veriyoruz. Ayrıca Hadımköy, Boğazköy, Silivri ve Çatalca yönüne de gidiyoruz.</p>
+      <ul class="ye-mesh">
+        {%- for d in DIST %}<li><a href="{{ root }}{{ d.slug }}-evde-saglik/">{{ d.name }}</a></li>{% endfor %}
+        {%- for f in FLAG_TOP %}<li><a href="{{ root }}{{ f.slug }}/">{{ f.name }}</a></li>{% endfor %}
+      </ul>
+    </div>
+
+    <h2>Diğer evde sağlık hizmetlerimiz</h2>
+    <div class="ye-grid ye-g2">
+      {%- for o in OTHERS %}
+      <a class="ye-card" href="{{ root }}hizmetler/{{ o.slug }}/">
+        <span class="ye-card-ic">{{ I[o.icon]|safe }}</span>
+        <h3>{{ o.title }}</h3><p>{{ o.short }}</p>
+      </a>
+      {%- endfor %}
+    </div>
+
+    {{ m.faq(SV.faq) }}
+
+    <div class="ye-box ye-box-r">
+      <h3>Önemli uyarı</h3>
+      <p style="margin:0">{{ DISCLAIMER }}</p>
+    </div>
+  </div>
+
+  <aside class="ye-aside">
+    <div class="ye-aside-c" style="background:linear-gradient(135deg,var(--brand-l),#fff);border-color:var(--brand-l)">
+      <h3>7/24 çağrı hattı</h3>
+      <p style="font-size:.9rem">Gece, hafta sonu ve resmî tatil dahil.</p>
+      <a class="ye-btn ye-btn-p ye-btn-sm" style="width:100%" href="tel:{{ S.phone_tel }}">{{ I.phone|safe }} {{ S.phone_display }}</a>
+      <a class="ye-btn ye-btn-wa ye-btn-sm" style="width:100%;margin-top:8px" href="https://wa.me/{{ S.wa }}?text={{ WA_TEXT }}" rel="noopener">{{ I.wa|safe }} WhatsApp</a>
+    </div>
+    <div class="ye-aside-c">
+      <h3>Serum tedavileri</h3>
+      <ul>{% for s in SER[:10] %}<li><a href="{{ root }}serum-tedavileri/{{ s.slug }}/">{{ s.title }}</a></li>{% endfor %}
+      <li><a href="{{ root }}serum-tedavileri/"><strong>Tümünü gör →</strong></a></li></ul>
+    </div>
+    <div class="ye-aside-c">
+      <h3>Öne çıkan bölgeler</h3>
+      <ul>{% for f in FLAG_TOP %}<li><a href="{{ root }}{{ f.slug }}/">{{ f.name }} evde sağlık</a></li>{% endfor %}</ul>
+    </div>
+  </aside>
+</div></section>
+
+<section class="ye-sec ye-sec-soft"><div class="ye-wrap">
+  {{ m.cta(S, I, WA_TEXT, SV.title + ' için hemen arayın', 'Telefonda durumunuzu dinler, hekim istemi gerekip gerekmediğini söyler ve size gerçekçi bir varış saati veririz.') }}
+</div></section>
+{% endblock %}

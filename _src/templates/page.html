@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% import "macros.html" as m %}
+{% block content %}
+{{ m.bc(crumbs, root) }}
+<section class="ye-ph"><div class="ye-wrap ye-narrow">
+  <span class="ye-kicker">{{ kicker }}</span>
+  <h1>{{ h1 }}</h1>
+  {%- if lead %}<p class="ye-lead">{{ lead }}</p>{% endif %}
+</div></section>
+<section class="ye-sec"><div class="ye-wrap ye-narrow ye-art">
+  {{ body|safe }}
+</div></section>
+<section class="ye-sec ye-sec-soft"><div class="ye-wrap">
+  {{ m.cta(S, I, WA_TEXT, cta_h, cta_t) }}
+</div></section>
+{% endblock %}

@@ -2,12 +2,14 @@
   'use strict';
   var d=document;
 
-  /* sticky header gölgesi */
-  var hdr=d.querySelector('.ye-hdr');
-  if(hdr){
-    var onScroll=function(){ hdr.classList.toggle('is-stuck', window.scrollY>8); };
-    onScroll(); window.addEventListener('scroll',onScroll,{passive:true});
-  }
+  /* sticky header gölgesi + "Uzmana Danış" rozetinin görünürlüğü */
+  var hdr=d.querySelector('.ye-hdr'), ask=d.querySelector('.ye-ask');
+  var onScroll=function(){
+    var y=window.scrollY;
+    if(hdr) hdr.classList.toggle('is-stuck', y>8);
+    if(ask) ask.classList.toggle('is-on', y>240);
+  };
+  onScroll(); window.addEventListener('scroll',onScroll,{passive:true});
 
   /* mobil menü */
   var burger=d.querySelector('.ye-burger'), nav=d.querySelector('.ye-nav'), ovl=d.querySelector('.ye-ovl');

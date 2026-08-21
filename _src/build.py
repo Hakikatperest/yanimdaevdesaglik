@@ -198,7 +198,7 @@ def ld_biz(area=None, url=None, name=None):
         "@id": S["domain"] + "/#kurulus",
         "name": name or S["name"], "url": url or (S["domain"] + "/"),
         "telephone": S["phone_tel"], "image": S["domain"] + "/assets/img/hero-1440.webp",
-        "priceRange": "₺₺",
+        "priceRange": "₺₺", "foundingDate": "2020",
         "medicalSpecialty": "https://schema.org/Nursing",
         "openingHoursSpecification": [{"@type": "OpeningHoursSpecification",
             "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
@@ -481,8 +481,9 @@ def build_all():
           title=f"Hakkımızda | {S['name']}",
           description="Yanımda Evde Sağlık; Beylikdüzü, Esenyurt ve Bahçeşehir'deki üç konumuyla İstanbul Avrupa Yakası'nda 7/24 evde hemşire hizmeti veriyor.",
           kicker="Hakkımızda", h1="Yanımda Evde Sağlık", crumbs=[("Hakkımızda", None)],
-          lead="Hastanede yapılabilen ama hastane gerektirmeyen uygulamaları, hastanın kendi evinde ve doğru koşullarda tamamlıyoruz.",
+          lead="Yanımda Evde Sağlık ekibi uzman kadrosuyla 6 yıldır hizmet vermektedir. Evde sağlık ihtiyaçlarınız için verilen konuma uzman ekibimiz gelir, hasta ile özel olarak ilgilenir.",
           body="""
+<p>Hastanede yapılabilen ama hastane gerektirmeyen uygulamaları, hastanın kendi evinde ve doğru koşullarda tamamlıyoruz.</p>
 <p><img src="../assets/img/ekip-960.webp" srcset="../assets/img/ekip-640.webp 640w, ../assets/img/ekip-960.webp 960w"
      sizes="(max-width:900px) 92vw, 820px" width="960" height="720" loading="lazy" decoding="async"
      style="border-radius:22px;aspect-ratio:16/9;object-fit:cover"
@@ -585,7 +586,7 @@ def build_all():
         dist_ctx.append(dd)
     write("", "home.html", 1.0, "weekly",
           title="Evde Sağlık ve Serum Hizmeti | 7/24 Hemşire | Yanımda Evde Sağlık",
-          description="Evde serum, enjeksiyon, pansuman ve sonda hizmetleri. Esenyurt, Beylikdüzü, Avcılar, Büyükçekmece ve Başakşehir'de 7/24 hemşire evinize gelir. 0551 844 82 95",
+          description="6 yıldır evde serum, enjeksiyon, pansuman ve sonda hizmeti. Esenyurt, Beylikdüzü, Avcılar, Büyükçekmece ve Başakşehir'de 7/24 uzman ekibimiz evinize gelir. 0551 844 82 95",
           DIST=dist_ctx, FAQ=hfaq, POSTS=POSTS, EXTRA_TXT=", ".join(EXTRA_AREAS),
           jsonld=[ld_biz(), ld_faq(hfaq),
                   ld({"@context":"https://schema.org","@type":"WebSite","name":S["name"],

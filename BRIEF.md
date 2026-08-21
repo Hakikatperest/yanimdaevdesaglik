@@ -6,13 +6,13 @@ Metni verdiğinde ilgili dosyaya yerleştirip `python3 _src/build.py` çalışt�
 
 | Sayfa | Dosya | Ne isteniyor |
 |---|---|---|
-| Anasayfa hero + "Neden bizi arıyorlar" | `_src/templates/home.html` | 1 paragraf giriş + 6 kısa madde, kendi üslubunla |
-| Hakkımızda | `_src/build.py` → `write("hakkimizda"…)` | Kuruluş hikâyesi, ekip, kaç yıldır, kaç hasta — **gerçek rakam** |
+| Anasayfa hero | `_src/templates/home.html` | Hero başlığı + giriş paragrafı hâlâ v1. ("Neden bizi arıyorlar" bölümüne kullanıcı metni eklendi ✅) |
+| ~~Hakkımızda giriş~~ | ✅ kullanıcı yazdı (6 yıl / uzman kadro), 2026-08-21 | Kalan: kaç hasta, ekip büyüklüğü, varsa sertifika |
 | 6 Bilgi Merkezi yazısı | `_src/posts.py` | Gövdeler yazıldı; kendi vaka örneklerini ekle (birinci elden deneyim = AI aramalarında görünürlük için kritik) |
 | 12 büyük semt sayfası | `_src/flagship.py` | `context` paragrafları — o bölgede gerçekten yaşadığın vakaları yaz |
 
 ## 2. Teyit edilmesi gerekenler
-- [ ] **2. harita konumu**: koordinat (41.0345, 28.6747) Esenyurt'a düşüyor, sayfalarda "Esenyurt" olarak etiketlendi. Doğru mu?
+- [x] **2. harita konumu**: Esenyurt — kullanıcı onayladı (2026-08-21).
 - [ ] Hadımköy ve Boğazköy **Arnavutköy** ilçesinde. Hizmet bölgesi listesinde olduğu için semt sayfası açıldı, ilçe sayfası açılmadı — doğru mu?
 - [ ] Varış süresi: hiçbir sayfada dakika vaadi yok ("aradığınızda gerçekçi süre söylenir" deniyor). Belirli bölgeler için gerçek süre vermek istersen söyle, ekleyeyim.
 - [ ] Fiyat bilgisi hiçbir yerde yok. Eklenecek mi?

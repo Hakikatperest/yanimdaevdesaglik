@@ -573,6 +573,85 @@ def build_all():
           cta_h="Sorularınız için", cta_t="Bize telefon ya da WhatsApp üzerinden ulaşabilirsiniz.",
           jsonld=[ld_bc([("Gizlilik Politikası", None)])])
 
+
+    # --- site haritası (görünür sayfa)
+    sm_groups = []
+    sm_groups.append(dict(
+        title="Evde Sağlık Hizmetleri", url="../hizmetler/",
+        sub=f"{len(SERVICES)} hizmet sayfası",
+        links=[dict(slug=f"hizmetler/{x['slug']}", label=x["title"]) for x in SERVICES]))
+    sm_groups.append(dict(
+        title="Serum Tedavileri", url="../serum-tedavileri/",
+        sub=f"{len(SERUMS)} serum sayfası",
+        links=[dict(slug=f"serum-tedavileri/{x['slug']}", label=x["title"]) for x in SERUMS]))
+
+    ilce_links = []
+    for d in DISTRICTS:
+        ilce_links.append(dict(slug=loc_url(d["slug"]).rstrip("/"), label=f'{d["name"]} Evde Sağlık'))
+        ilce_links.append(dict(slug=loc_url(d["slug"], "serum").rstrip("/"), label=f'{d["name"]} Evde Serum'))
+    sm_groups.append(dict(title="İlçeler", url="../hizmet-bolgeleri/",
+                          sub=f"{len(DISTRICTS)} ilçe · her biri için evde sağlık ve evde serum sayfası",
+                          links=ilce_links))
+
+    semt_links, semt_n = [], 0
+    for k, v in LOCS.items():
+        if v["kind"] != "semt":
+            continue
+        semt_n += 1
+        semt_links.append(dict(slug=loc_url(k).rstrip("/"), label=f'{v["name"]} Evde Sağlık'))
+        if k in SERUM_SET:
+            semt_links.append(dict(slug=loc_url(k, "serum").rstrip("/"), label=f'{v["name"]} Evde Serum'))
+    sm_groups.append(dict(title="Öne Çıkan Semtler", url="../hizmet-bolgeleri/",
+                          sub=f"{semt_n} semt · bölgeye özel içerikle",
+                          links=semt_links))
+
+    for d in DISTRICTS:
+        ml = []
+        for mh in d["mahalleler"]:
+            b2 = mah_base(mh, d["name"])
+            if b2 not in LOCS:
+                continue
+            ml.append(dict(slug=loc_url(b2).rstrip("/"), label=mh))
+            if b2 in SERUM_SET:
+                ml.append(dict(slug=loc_url(b2, "serum").rstrip("/"), label=f"{mh} (serum)"))
+        sm_groups.append(dict(title=f'{d["name"]} Mahalleleri', url=f'../{d["slug"]}-evde-saglik/',
+                              sub=f'{len(d["mahalleler"])} mahalle', links=ml))
+
+    sm_groups.append(dict(title="Bilgi Merkezi", url="../blog/",
+                          sub=f"{len(POSTS)} rehber yazısı",
+                          links=[dict(slug=f"blog/{x['slug']}", label=x["title"]) for x in POSTS]))
+    sm_groups.append(dict(title="Kurumsal", url="../hakkimizda/", sub="Kurumsal ve yasal sayfalar",
+                          links=[dict(slug="", label="Ana Sayfa"),
+                                 dict(slug="hakkimizda", label="Hakkımızda"),
+                                 dict(slug="iletisim", label="İletişim"),
+                                 dict(slug="hizmet-bolgeleri", label="Hizmet Bölgeleri"),
+                                 dict(slug="sikca-sorulan-sorular", label="Sıkça Sorulan Sorular"),
+                                 dict(slug="gizlilik-politikasi", label="Gizlilik Politikası")]))
+
+    # eksiksizlik ağı — üretilmiş hiçbir sayfa listenin dışında kalmasın
+    kapsanan = {g["url"].lstrip("./") for g in sm_groups}
+    kapsanan |= {l["slug"].strip("/") + "/" for g in sm_groups for l in g["links"]}
+    kapsanan |= {"", "site-haritasi/", "404.html"}
+    kacak = []
+    for u, _, _ in PAGES:
+        rel = u.replace(S["domain"] + "/", "")
+        if rel not in kapsanan:
+            kacak.append(dict(slug=rel.rstrip("/"), label=rel.rstrip("/").replace("-", " ")))
+    if kacak:
+        sm_groups.append(dict(title="Diğer sayfalar", url="../", sub=f"{len(kacak)} sayfa", links=kacak))
+        print(f"  ! site haritasına ek: {[k['slug'] for k in kacak]}")
+
+    toplam = sum(len(g["links"]) for g in sm_groups) + 7
+    write("site-haritasi", "hub.html", 0.4, "weekly",
+          title=f"Site Haritası | {S['name']}",
+          description=f"Yanımda Evde Sağlık site haritası — {toplam} sayfa: evde sağlık hizmetleri, serum tedavileri, ilçe ve mahalle sayfaları, bilgi merkezi.",
+          kicker="Site Haritası", h1="Site haritası",
+          lead=f"Sitedeki tüm sayfalar tek listede. Aradığınız hizmeti, serum tedavisini ya da mahallenizi buradan bulabilirsiniz.",
+          crumbs=[("Site Haritası", None)], groups=sm_groups,
+          body='<h2>Arama motorları için</h2><p>Makine tarafından okunan XML site haritası <a href="../sitemap.xml">/sitemap.xml</a> adresindedir ve her yayında otomatik güncellenir.</p>',
+          cta_h="Mahallenizi listede bulamadınız mı?",
+          cta_t="Arayın, adresinizi teyit edelim. Hizmet alanımızın sınırındaki bölgelere de gidiyoruz.")
+
     # --- anasayfa
     hfaq = [("Evde serum takmak güvenli mi?","Hekim istemi doğrultusunda, deneyimli bir hemşire tarafından ve uygulama boyunca gözlem yapılarak uygulandığında güvenlidir. Serum takılıp gidilmez; hemşire uygulama bitene kadar evde kalır."),
             ("Reçetem yok, yine de gelir misiniz?","Damar içi uygulama için hekim istemi şarttır. Reçeteniz yoksa telefonda nasıl ilerlemeniz gerektiğini anlatırız."),

@@ -39,7 +39,7 @@
   <div class="ye-box ye-rv" style="background:#fff">
     <h3 style="margin-bottom:4px"><a href="{{ g.url }}">{{ g.title }}</a></h3>
     <p style="font-size:.9rem;color:var(--ink-3)">{{ g.sub }}</p>
-    <ul class="ye-mesh">{% for l in g.links %}<li><a href="{{ root }}{{ l.slug }}/">{{ l.label }}</a></li>{% endfor %}</ul>
+    <ul class="ye-mesh">{% for l in g.links %}<li><a href="{{ root }}{% if l.slug %}{{ l.slug }}/{% endif %}">{{ l.label }}</a></li>{% endfor %}</ul>
   </div>
   {%- endfor %}
 </div></section>

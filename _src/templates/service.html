@@ -13,6 +13,7 @@
 
 <section class="ye-sec"><div class="ye-wrap ye-split">
   <div class="ye-art">
+    {{ m.shot(IMG, S, I) }}
     {%- for head, items in SV.sections %}
     <h2>{{ head }}</h2>
     <ul class="ye-check">{% for it in items %}<li>{{ it }}</li>{% endfor %}</ul>

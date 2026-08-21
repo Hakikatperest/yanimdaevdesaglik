@@ -59,3 +59,17 @@
   {%- for s in SER[:limit] %}<li><a href="{{ root }}serum-tedavileri/{{ s.slug }}/">{{ s.title }}</a></li>{% endfor %}
 </ul>
 {% endmacro %}
+
+{% macro shot(im, S, I, cap=true, cls='') %}
+{%- if im %}
+<figure class="ye-shot {{ cls }} ye-rv">
+  <a href="tel:{{ S.phone_tel }}" aria-label="{{ im.cap }} — aramak için dokunun, {{ S.phone_display }}">
+    <img src="{{ im.src }}" srcset="{{ im.srcset }}" sizes="{{ im.sizes }}"
+         width="{{ im.w }}" height="{{ im.h }}" alt="{{ im.alt }}"
+         {% if im.eager %}fetchpriority="high"{% else %}loading="lazy"{% endif %} decoding="async">
+    <span class="ye-shot-bar">{{ I.phone|safe }} {{ S.phone_display }} · dokunun, hemen arayın</span>
+  </a>
+  {%- if cap %}<figcaption>{{ im.cap }}</figcaption>{% endif %}
+</figure>
+{%- endif %}
+{% endmacro %}

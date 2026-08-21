@@ -11,6 +11,10 @@
   </div>
 </div></section>
 
+{% if IMG %}
+<section class="ye-sec" style="padding-bottom:0"><div class="ye-wrap ye-narrow">{{ m.shot(IMG, S, I) }}</div></section>
+{% endif %}
+
 {% if intro %}
 <section class="ye-sec" style="padding-bottom:0"><div class="ye-wrap ye-narrow ye-art">{{ intro|safe }}</div></section>
 {% endif %}
@@ -42,7 +46,7 @@
 {% endif %}
 
 {% if body %}
-<section class="ye-sec"><div class="ye-wrap ye-narrow ye-art">{{ body|safe }}</div></section>
+<section class="ye-sec"><div class="ye-wrap ye-narrow ye-art">{{ body|safe }}{{ m.shot(IMG2, S, I) }}</div></section>
 {% endif %}
 
 {% if faq %}

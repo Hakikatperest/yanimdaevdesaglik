@@ -10,6 +10,7 @@
 
 <section class="ye-sec"><div class="ye-wrap ye-split">
   <div class="ye-art">
+    {{ m.shot(IMG, S, I) }}
     {{ P.body|safe }}
     {%- if P.faq %}{{ m.faq(P.faq) }}{% endif %}
     <div class="ye-box ye-box-r"><h3>Önemli uyarı</h3><p style="margin:0">{{ DISCLAIMER }}</p></div>

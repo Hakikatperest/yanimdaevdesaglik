@@ -7,31 +7,20 @@
       <span class="ye-eyebrow">{{ I.pin|safe }} Esenyurt · Beylikdüzü · Avcılar · Büyükçekmece · Başakşehir</span>
       <h1>Evde <em>serum ve sağlık hizmeti</em> — hemşiremiz kapınızda, 7/24</h1>
       <p class="ye-lead">Hastane kuyruğunda saatlerce beklemek zorunda değilsiniz. Serum, enjeksiyon, pansuman, sonda takma ve daha fazlası; hekim istemi doğrultusunda kendi evinizde, deneyimli hemşireler tarafından uygulanır.</p>
+      <div class="ye-btns">
+        <a class="ye-btn ye-btn-p" href="tel:{{ S.phone_tel }}">{{ I.phone|safe }} {{ S.phone_display }}</a>
+        <a class="ye-btn ye-btn-wa" href="https://wa.me/{{ S.wa }}?text={{ WA_TEXT }}" rel="noopener">{{ I.wa|safe }} WhatsApp'tan yaz</a>
+      </div>
       <ul class="ye-trust">
         <li>{{ I.clock|safe }} Gece, hafta sonu, resmî tatil</li>
         <li>{{ I.shield|safe }} Hekim istemine uygun uygulama</li>
         <li>{{ I.nurse|safe }} 6 yıldır uzman kadro</li>
         <li>{{ I.pin|safe }} 3 ayrı konum</li>
       </ul>
-      <div class="ye-btns">
-        <a class="ye-btn ye-btn-p" href="tel:{{ S.phone_tel }}">{{ I.phone|safe }} {{ S.phone_display }}</a>
-        <a class="ye-btn ye-btn-wa" href="https://wa.me/{{ S.wa }}?text={{ WA_TEXT }}" rel="noopener">{{ I.wa|safe }} WhatsApp'tan yaz</a>
-      </div>
       <p class="ye-note" style="margin-bottom:0">Aradığınızda şikâyetiniz, yaşınız ve kullandığınız ilaçlar sorulur; hekim istemi yoksa önce muayene için yönlendirilirsiniz.</p>
     </div>
     <div class="ye-hero-media">
-      <img src="{{ root }}assets/img/hero-960.webp"
-           srcset="{{ root }}assets/img/hero-640.webp 640w, {{ root }}assets/img/hero-960.webp 960w, {{ root }}assets/img/hero-1440.webp 1440w"
-           sizes="(max-width:1024px) 92vw, 46vw" width="960" height="720" fetchpriority="high" decoding="async"
-           alt="Yanımda Evde Sağlık hemşiresi evde serum uygulaması yaparken">
-      <div class="ye-float ye-float-1">
-        <span class="ye-float-ic">{{ I.clock|safe }}</span>
-        <span><b>7/24 çağrı</b><span>Gece 03.00 dahil</span></span>
-      </div>
-      <div class="ye-float ye-float-2">
-        <span class="ye-float-ic">{{ I.drop|safe }}</span>
-        <span><b>15 serum tedavisi</b><span>Hekim istemiyle</span></span>
-      </div>
+      {{ m.shot(IMG_HERO, S, I, false, 'ye-shot-hero') }}
     </div>
   </div>
 </section>
@@ -64,7 +53,11 @@
       <p>Aşağıdaki başlıkların her biri için ayrı bir bilgi sayfası hazırladık: belirtiler, uygulamanın nasıl ilerlediği, içeriğinde neler olabileceği ve dikkat edilmesi gerekenler.</p>
     </div>
     {{ m.serumpills(SER, root) }}
-    <div class="ye-box ye-box-b ye-rv" style="margin-top:34px">
+    <div class="ye-grid ye-g2" style="margin-top:34px;align-items:start">
+      {{ m.shot(IMG_SERUM, S, I) }}
+      {{ m.shot(IMG_SERUM2, S, I) }}
+    </div>
+    <div class="ye-box ye-box-b ye-rv" style="margin-top:10px">
       <h3>Serum kararını kim veriyor?</h3>
       <p>Hangi serumun uygulanacağına ve içine hangi ilaçların ekleneceğine <strong>hekim</strong> karar verir. Ekibimiz hekim istemi olmadan damar içi uygulama yapmaz. Hekim değerlendirmesi olmayan durumlarda önce muayene için yönlendirme yapılır — bu bizim için tartışmaya açık bir konu değil.</p>
     </div>
@@ -76,13 +69,6 @@
     <div class="ye-head ye-center ye-rv">
       <span class="ye-kicker">Nasıl işliyor</span>
       <h2>Aramadan uygulama sonuna kadar</h2>
-    </div>
-    <div class="ye-rv" style="margin-bottom:36px;border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--sh-l)">
-      <img src="{{ root }}assets/img/ekip-960.webp"
-           srcset="{{ root }}assets/img/ekip-640.webp 640w, {{ root }}assets/img/ekip-960.webp 960w"
-           sizes="(max-width:1024px) 94vw, 1160px" width="960" height="720" loading="lazy" decoding="async"
-           style="width:100%;aspect-ratio:21/9;object-fit:cover"
-           alt="Yanımda Evde Sağlık ekibi hastanın evinde uygulama hazırlığı yaparken">
     </div>
     {{ m.steps([
       ('Arayın ya da yazın','Şikâyetinizi, yaşınızı, kronik hastalık ve kullandığınız ilaçları sorarız. Hekim istemi/reçete varsa fotoğrafını isteriz.'),
@@ -118,6 +104,7 @@
 
 <section class="ye-sec">
   <div class="ye-wrap">
+    {{ m.shot(IMG_MID, S, I) }}
     {{ m.maps(BR, I, 'Konumlarımız') }}
     <p class="ye-note">Üç ayrı konumumuz sayesinde Esenyurt–Beylikdüzü–Bahçeşehir hattındaki çağrılara aynı anda yanıt verebiliyoruz.</p>
   </div>

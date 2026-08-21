@@ -20,6 +20,8 @@
     {%- for head, paras in L.blocks %}
     <h2>{{ head }}</h2>
     {%- for p in paras %}<p>{{ p }}</p>{% endfor %}
+    {%- if loop.first %}{{ m.shot(IMG, S, I) }}{% endif %}
+    {%- if loop.last and IMG2 %}{{ m.shot(IMG2, S, I) }}{% endif %}
     {%- endfor %}
 
     <h2>{{ L.nd }} verdiğimiz hizmetler</h2>

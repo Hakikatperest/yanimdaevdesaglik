@@ -10,6 +10,7 @@ from site_data import (SITE as S, BRANCHES, DISTRICTS, EXTRA_AREAS, SEMTLER,
                        SERUM_LOCATIONS, SERVICES, SERUMS, DISCLAIMER)
 from flagship import FLAGSHIP
 from icons import ICONS
+import media as MED
 import content as C
 
 YEAR = 2026
@@ -152,7 +153,7 @@ NAV = dict(services=SERVICES, serums=SERUMS, districts=DISTRICTS,
 
 BASE = dict(S=S, I=ICONS, NAV=NAV, YEAR=YEAR, V=V, WA_TEXT=WA_TEXT, DISCLAIMER=DISCLAIMER,
             SRV=SERVICES, SER=SERUMS, DIST=DISTRICTS, BR=BRANCHES,
-            FLAG_TOP=FLAG_TOP, FLAG_SERUM=FLAG_SERUM)
+            FLAG_TOP=FLAG_TOP, FLAG_SERUM=FLAG_SERUM, MED=MED)
 
 PAGES = []   # (path, priority, changefreq)
 
@@ -326,9 +327,14 @@ def build_location(base, L, mode):
 
     path = loc_url(base, mode).rstrip("/")
     prio = 0.9 if L["kind"] == "ilce" else (0.8 if flag else 0.65)
+    pool = MED.SERUM_POOL if is_serum else MED.ROTATE
+    i1 = img(pick(pool, key), "(max-width:1024px) 92vw, 700px")
+    i2 = img(pick(MED.ROTATE, key, 3), "(max-width:1024px) 92vw, 700px") if L["kind"] != "mahalle" or flag else None
+    if i2 and i1 and i2["key"] == i1["key"]:
+        i2 = img(pick(MED.ROTATE, key, 5), "(max-width:1024px) 92vw, 700px")
     write(path, "location.html", prio, "weekly",
           title=f"{h1} | {S['name']}", description=desc, h1=h1, L=Lc, crumbs=crumbs,
-          SER_LOCAL=ser_local, og_img="default",
+          SER_LOCAL=ser_local, og_img="default", IMG=i1, IMG2=i2,
           jsonld=[ld_biz(area=[name, dist, "İstanbul"], url=S["domain"] + "/" + path + "/",
                          name=f"{S['name']} — {name}"),
                   ld_faq(faq)])
@@ -352,6 +358,7 @@ def build_all():
               title=f"{sv['title']} | İstanbul Avrupa Yakası 7/24 | {S['name']}",
               description=f"{sv['title']} — {sv['short']} Esenyurt, Beylikdüzü, Avcılar, Büyükçekmece ve Başakşehir'de 7/24 evde uygulama. {S['phone_display']}",
               SV=sv, OTHERS=others[:4], crumbs=crumbs,
+              IMG=img(MED.SERVICE_IMG.get(sv["slug"]), "(max-width:1024px) 92vw, 700px"),
               jsonld=[ld({"@context":"https://schema.org","@type":"Service","name":sv["title"],
                           "serviceType":sv["kw"],"description":sv["lead"],
                           "provider":{"@type":"MedicalBusiness","name":S["name"],"telephone":S["phone_tel"],
@@ -381,6 +388,7 @@ def build_all():
               title=f"{sm['title']} | Evde Uygulama 7/24 | {S['name']}",
               description=f"{sm['title']}: ne zaman gerekir, içeriğinde neler olabilir, nelere dikkat edilir. İstanbul Avrupa Yakası'nda 7/24 evde uygulama. {S['phone_display']}",
               SM=sm, OTHERS=others, crumbs=crumbs, FAQ=faq,
+              IMG=img(pick(MED.SERUM_POOL, sm["slug"]), "(max-width:1024px) 92vw, 700px"),
               jsonld=[ld({"@context":"https://schema.org","@type":"MedicalWebPage",
                           "name":sm["title"],"description":sm["lead"],
                           "about":{"@type":"MedicalTherapy","name":sm["title"]},
@@ -396,7 +404,7 @@ def build_all():
           description="Evde serum, enjeksiyon, pansuman, idrar sondası ve nazogastrik sonda hizmetleri. İstanbul Avrupa Yakası'nda 7/24 hemşire hizmeti. " + S["phone_display"],
           kicker="Hizmetlerimiz", h1="Evde Sağlık Hizmetleri",
           lead="Hastanede yapılabilen ama hastane gerektirmeyen uygulamaları evinizde tamamlıyoruz. Hepsi hekim istemi doğrultusunda, steril şartlarda ve tıbbi atık geri alınarak yapılır.",
-          grid="ye-g4", crumbs=crumbs,
+          grid="ye-g4", crumbs=crumbs, IMG=img(MED.HUB_SERVICE), IMG2=img("evde-saglikci"),
           cards=[dict(url=f"hizmetler/{x['slug']}/".replace("hizmetler/", ""), title=x["title"], text=x["short"], icon=x["icon"]) for x in SERVICES],
           body="<h2>Hangi hizmeti seçmeliyim?</h2><p>Emin değilseniz aramanız yeterli. Telefonda şikâyetinizi dinler, elinizdeki hekim istemine bakar ve hangi uygulamanın gerektiğini söyleriz. Hekim değerlendirmesi olmayan durumlarda önce muayene için yönlendirme yaparız.</p>"
                "<h2>Nerelere geliyoruz?</h2><p>Esenyurt, Beylikdüzü, Avcılar, Büyükçekmece ve Başakşehir'in <strong>tüm mahallelerine</strong>; ayrıca Hadımköy, Boğazköy, Silivri ve Çatalca yönüne. <a href=\"../hizmet-bolgeleri/\">Hizmet bölgeleri sayfasından</a> mahallenizi bulabilirsiniz.</p>",
@@ -416,7 +424,7 @@ def build_all():
           description="Bulantı, ishal, ateş, grip, migren, alerji ve daha fazlası için evde serum uygulaması. Belirtiler, içerik ve dikkat edilecekler. 7/24 — " + S["phone_display"],
           kicker="Serum Tedavileri", h1="Evde Serum Tedavileri",
           lead="Aşağıdaki başlıkların her biri için ayrı bir bilgi sayfası hazırladık: hangi durumda gündeme gelir, içeriğinde neler olabilir, uygulama nasıl ilerler ve nelere dikkat edilmelidir.",
-          grid="ye-g3", crumbs=crumbs,
+          grid="ye-g3", crumbs=crumbs, IMG=img(MED.HUB_SERUM), IMG2=img("evde-serum-yaptir"),
           cards=[dict(url=f"{x['slug']}/", title=x["title"], text=x["lead"][:118] + "…", icon="drop") for x in SERUMS],
           intro="<div class=\"ye-box ye-box-r\"><h3>Önce şunu söyleyelim</h3><p style=\"margin:0\">Hangi serumun uygulanacağına ve içine hangi ilaçların ekleneceğine <strong>hekim</strong> karar verir. Bu sayfalar tanı koymak için değil, ne olduğunu anlamanız için hazırlandı. Ekibimiz hekim istemi olmadan damar içi uygulama yapmaz.</p></div>",
           faq=sfaq,
@@ -443,7 +451,7 @@ def build_all():
           description="Esenyurt, Beylikdüzü, Avcılar, Büyükçekmece ve Başakşehir'in tüm mahallelerinde evde sağlık ve serum hizmeti. Mahallenizi seçin. " + S["phone_display"],
           kicker="Hizmet Bölgeleri", h1="Hangi bölgelere geliyoruz?",
           lead="Beş ilçenin tüm mahallelerine gidiyoruz. Ayrıca Hadımköy, Boğazköy, Silivri ve Çatalca yönündeki adresler için de arayabilirsiniz.",
-          crumbs=crumbs, groups=groups,
+          crumbs=crumbs, groups=groups, IMG=img(MED.HUB_AREA), IMG2=img("7-24-evde-saglik"),
           body="<h2>Bölgede üç ayrı konumumuz var</h2><p>Beylikdüzü, Esenyurt ve Bahçeşehir'deki konumlarımız sayesinde Avrupa Yakası'nın batı hattındaki çağrılara aynı anda yanıt verebiliyoruz. Adresinize hangi ekibin geleceğini telefonda söylüyoruz.</p><p>Listede mahallenizi göremiyorsanız yine de arayın — hizmet alanımızın sınırında olan adresler için teyit ediyoruz.</p>",
           cta_h="Mahallenizi listede bulamadınız mı?", cta_t="Arayın, adresinizi teyit edelim. Hizmet alanımızın sınırındaki bölgelere de gidiyoruz.",
           jsonld=[ld_biz()])
@@ -456,7 +464,7 @@ def build_all():
           description="Evde serum, pansuman, sonda bakımı, ateş takibi ve sıvı kaybı üzerine hasta yakınları için hazırlanmış pratik rehberler.",
           kicker="Bilgi Merkezi", h1="Evde bakım rehberleri",
           lead="Telefonda en sık aldığımız soruların uzun cevapları. Hepsi hasta yakınının evde uygulayabileceği bilgiler üzerine kurulu.",
-          grid="ye-g3", crumbs=crumbs,
+          grid="ye-g3", crumbs=crumbs, IMG=img("evde-saglikci-numarasi"),
           cards=[dict(url=f"{p['slug']}/", title=p["title"], text=p["excerpt"], icon=None) for p in POSTS],
           cta_h="Yazıda cevabını bulamadığınız bir şey mi var?", cta_t="Arayın. Telefonda durumunuza özel konuşmak, genel bilgiden her zaman daha yararlıdır.",
           jsonld=[])
@@ -467,6 +475,7 @@ def build_all():
         write(f"blog/{p['slug']}", "article.html", 0.7, "monthly",
               title=f"{p['title']} | {S['name']}", description=p["excerpt"][:300],
               og_type="article", P=p, OTHERS=others, crumbs=crumbs,
+              IMG=img(pick(MED.ROTATE, p["slug"]), "(max-width:1024px) 92vw, 700px"),
               jsonld=[ld({"@context":"https://schema.org","@type":"Article","headline":p["title"],
                           "description":p["excerpt"],"datePublished":p["date"],"dateModified":p["date"],
                           "inLanguage":"tr-TR",
@@ -481,13 +490,10 @@ def build_all():
           title=f"Hakkımızda | {S['name']}",
           description="Yanımda Evde Sağlık; Beylikdüzü, Esenyurt ve Bahçeşehir'deki üç konumuyla İstanbul Avrupa Yakası'nda 7/24 evde hemşire hizmeti veriyor.",
           kicker="Hakkımızda", h1="Yanımda Evde Sağlık", crumbs=[("Hakkımızda", None)],
+          IMG=img(MED.PAGE_HAKKIMIZDA),
           lead="Yanımda Evde Sağlık ekibi uzman kadrosuyla 6 yıldır hizmet vermektedir. Evde sağlık ihtiyaçlarınız için verilen konuma uzman ekibimiz gelir, hasta ile özel olarak ilgilenir.",
           body="""
 <p>Hastanede yapılabilen ama hastane gerektirmeyen uygulamaları, hastanın kendi evinde ve doğru koşullarda tamamlıyoruz.</p>
-<p><img src="../assets/img/ekip-960.webp" srcset="../assets/img/ekip-640.webp 640w, ../assets/img/ekip-960.webp 960w"
-     sizes="(max-width:900px) 92vw, 820px" width="960" height="720" loading="lazy" decoding="async"
-     style="border-radius:22px;aspect-ratio:16/9;object-fit:cover"
-     alt="Yanımda Evde Sağlık hemşire ekibi evde uygulama sırasında"></p>
 <h2>Ne yapıyoruz?</h2>
 <p>Evde serum uygulaması, kas içi ve cilt altı enjeksiyon, yara pansumanı, idrar sondası takma-değiştirme, nazogastrik sonda uygulaması ve hekim istemine bağlı vitamin takviyeleri. Hepsi hemşire ekibimiz tarafından, hastanın evinde yapılıyor.</p>
 <h2>Nerede çalışıyoruz?</h2>
@@ -534,7 +540,7 @@ def build_all():
 <h2>Konumlarımız</h2>
 <div class="ye-maps">{''.join(f'<div class="ye-map"><div class="ye-map-t">{ICONS["pin"]} {b["title"]}</div><div data-map="https://www.google.com/maps/embed?pb={b["pb"]}" data-title="{b["title"]} konumu" style="min-height:250px"></div></div>' for b in BRANCHES)}</div>
 """,
-          faq=ifaq, cta_h="Şimdi mi gerekiyor?", cta_t="Arayın; telefonda durumunuzu dinler, ne gerektiğini söyleriz.",
+          IMG=img(MED.PAGE_ILETISIM), faq=ifaq, cta_h="Şimdi mi gerekiyor?", cta_t="Arayın; telefonda durumunuzu dinler, ne gerektiğini söyleriz.",
           jsonld=[ld_biz(), ld_faq(ifaq)])
 
     gfaq = ([(q, a) for sv in SERVICES for q, a in sv["faq"][:2]] +
@@ -545,7 +551,7 @@ def build_all():
           description="Evde serum, enjeksiyon, pansuman ve sonda hizmetleri hakkında en sık sorulan sorular ve net cevaplar.",
           kicker="SSS", h1="Sıkça sorulan sorular", crumbs=[("Sıkça Sorulan Sorular", None)],
           lead="Telefonda en sık duyduğumuz sorular ve dolambaçsız cevapları.",
-          faq=gfaq, cta_h="Sorunuz listede yok mu?", cta_t="Arayın, doğrudan konuşalım.",
+          IMG=img("evde-saglik-hizmeti"), faq=gfaq, cta_h="Sorunuz listede yok mu?", cta_t="Arayın, doğrudan konuşalım.",
           jsonld=[ld_faq(gfaq)])
 
     write("gizlilik-politikasi", "page.html", 0.3, "yearly",
@@ -588,6 +594,10 @@ def build_all():
           title="Evde Sağlık ve Serum Hizmeti | 7/24 Hemşire | Yanımda Evde Sağlık",
           description="6 yıldır evde serum, enjeksiyon, pansuman ve sonda hizmeti. Esenyurt, Beylikdüzü, Avcılar, Büyükçekmece ve Başakşehir'de 7/24 uzman ekibimiz evinize gelir. 0551 844 82 95",
           DIST=dist_ctx, FAQ=hfaq, POSTS=POSTS, EXTRA_TXT=", ".join(EXTRA_AREAS),
+          IMG_HERO=img(MED.HOME_HERO, "(max-width:1024px) 92vw, 46vw", eager=True),
+          IMG_MID=img(MED.HOME_MID, "(max-width:1024px) 94vw, 1160px"),
+          IMG_SERUM=img(MED.HOME_SERUM, "(max-width:760px) 92vw, 560px"),
+          IMG_SERUM2=img("evde-saglikci", "(max-width:760px) 92vw, 560px"),
           jsonld=[ld_biz(), ld_faq(hfaq),
                   ld({"@context":"https://schema.org","@type":"WebSite","name":S["name"],
                       "url":S["domain"]+"/","inLanguage":"tr-TR"})])
@@ -629,49 +639,51 @@ def build_extras():
         'h0c2.6 0 4.6-2 4.6-4.6V36.6h10.8c2.6 0 4.6-2 4.6-4.6v0c0-2.6-2-4.6-4.6-4.6H36.6V16.6c0-2.6-2-4.6-4.6-4.6z"/></svg>')
 
 def build_images():
-    """Afişlerin içindeki fotoğraf bölgesini ve gerçek logoyu ayıklar.
-    Kaynak görseller hazır tanıtım afişi olduğu için merkez kırpma metni de alıyordu."""
+    """images/ içindeki her görselin TAM BOY (kırpmasız) türevlerini üretir.
+    Ayrıca afişin içinden logo ve OG görselini ayıklar."""
     from PIL import Image, ImageDraw, ImageFont
-    src  = os.path.join(OUT, "images/evde-saglik.webp")
-    src2 = os.path.join(OUT, "images/evde-saglik2.webp")
+    outdir = os.path.join(OUT, "assets/img/p")
+    os.makedirs(outdir, exist_ok=True)
+    for key, m in MED.IMAGES.items():
+        src = os.path.join(OUT, "images", m["file"])
+        if not os.path.exists(src):
+            print(f"  ! görsel yok: {m['file']}")
+            continue
+        im = Image.open(src).convert("RGB")
+        m["w"], m["h"] = im.size
+        widths = [w for w in (480, 760, 1100, 1440) if w <= im.width] or [im.width]
+        if im.width not in widths and im.width < 1440:
+            widths.append(im.width)
+        m["srcw"] = sorted(set(widths))
+        for w in m["srcw"]:
+            h = round(w * im.height / im.width)
+            im.resize((w, h), Image.LANCZOS).save(
+                os.path.join(outdir, f"{key}-{w}.webp"), "WEBP", quality=80, method=4)
+
+    # --- marka varlıkları: 1. afişin içinden
+    src = os.path.join(OUT, "images/evde-saglik.webp")
     if not os.path.exists(src):
         return
     a = Image.open(src).convert("RGB")
-
-    # --- hero: 1. afişteki hemşire-hasta fotoğrafı (metinsiz bölge)
-    hero = a.crop((705, 25, 1335, 585))
-    for size in (640, 960, 1440):
-        hero.resize((size, round(size * hero.height / hero.width)), Image.LANCZOS).save(
-            os.path.join(OUT, f"assets/img/hero-{size}.webp"), "WEBP", quality=82, method=4)
-
-    # --- ekip: 2. afişteki fotoğraf
-    if os.path.exists(src2):
-        b2 = Image.open(src2).convert("RGB").crop((700, 15, 1340, 560))
-        for size in (640, 960, 1440):
-            b2.resize((size, round(size * b2.height / b2.width)), Image.LANCZOS).save(
-                os.path.join(OUT, f"assets/img/ekip-{size}.webp"), "WEBP", quality=82, method=4)
-
-    # --- gerçek logo işareti (ev + kalp + artı + el)
     mark = a.crop((75, 50, 218, 202))
     sq = Image.new("RGB", (240, 240), (255, 255, 255))
-    m = mark.resize((216, round(216 * mark.height / mark.width)), Image.LANCZOS)
-    sq.paste(m, ((240 - m.width) // 2, (240 - m.height) // 2))
+    mm = mark.resize((216, round(216 * mark.height / mark.width)), Image.LANCZOS)
+    sq.paste(mm, ((240 - mm.width) // 2, (240 - mm.height) // 2))
     sq.save(os.path.join(OUT, "assets/img/logo-mark.png"), "PNG", optimize=True)
     sq.resize((180, 180), Image.LANCZOS).save(
         os.path.join(OUT, "assets/img/apple-touch-icon.png"), "PNG", optimize=True)
-
-    # --- schema/logo: işaret + kelime markası, beyaz zemin
     word = a.crop((70, 45, 500, 200))
     lg = Image.new("RGB", (600, 220), (255, 255, 255))
     w2 = word.resize((560, round(560 * word.height / word.width)), Image.LANCZOS)
     lg.paste(w2, (20, (220 - w2.height) // 2))
     lg.save(os.path.join(OUT, "assets/img/logo.png"), "PNG", optimize=True)
 
-    # --- OG görseli: fotoğraf + koyu degrade + marka bilgisi
-    og = hero.copy()
+    # --- OG görseli (fotoğraf bölgesi + degrade + marka)
+    og = a.crop((705, 25, 1335, 585))
     ow, oh = og.size
     th = round(ow * 630 / 1200)
-    og = og.crop((0, max(0, (oh - th) // 2), ow, max(0, (oh - th) // 2) + min(th, oh))).resize((1200, 630), Image.LANCZOS)
+    top = max(0, (oh - th) // 2)
+    og = og.crop((0, top, ow, top + min(th, oh))).resize((1200, 630), Image.LANCZOS)
     ov = Image.new("RGBA", (1200, 630), (0, 0, 0, 0))
     dr = ImageDraw.Draw(ov)
     for y in range(630):
@@ -688,6 +700,17 @@ def build_images():
     dr.text((60, 528), S["phone_display"], font=f2, fill=(255, 255, 255))
     dr.rectangle([(0, 618), (1200, 630)], fill=(15, 138, 128))
     og.save(os.path.join(OUT, "assets/img/og-default.jpg"), "JPEG", quality=84, optimize=True)
+
+def img(key, sizes="(max-width:900px) 92vw, 760px", eager=False):
+    """Şablonlara geçilecek görsel sözlüğü."""
+    m = MED.IMAGES.get(key)
+    if not m or "srcw" not in m:
+        return None
+    ws = m["srcw"]
+    best = ws[-1]
+    return dict(key=key, alt=m["alt"], cap=m["cap"], w=m["w"], h=m["h"], sizes=sizes, eager=eager,
+                src=f"/assets/img/p/{key}-{best}.webp",
+                srcset=", ".join(f"/assets/img/p/{key}-{w}.webp {w}w" for w in ws))
 
 if __name__ == "__main__":
     # eski çıktıları temizle (kaynak ve varlıklar hariç)
